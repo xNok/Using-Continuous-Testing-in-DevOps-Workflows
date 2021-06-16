@@ -34,3 +34,15 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+  tests_api:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test"
+
+  tests_e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test"
