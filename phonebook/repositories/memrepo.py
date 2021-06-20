@@ -1,7 +1,9 @@
 from phonebook.domain.person import Person
+from phonebook.repositories.IRepo import RepoBase
 
-class MemRepo:
+class MemRepo(RepoBase):
     def __init__(self, data):
+        super().__init__()
         self.data = data
 
     def list(self):

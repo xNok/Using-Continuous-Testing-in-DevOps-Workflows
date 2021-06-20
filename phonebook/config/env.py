@@ -13,9 +13,12 @@ class ProductionConfig(Config):
 
 class DevelopmentConfig(Config):
     """Development configuration"""
+    SECRET_KEY='dev',
+    DATABASE=':memory:'
 
 
 class TestingConfig(Config):
     """Testing configuration"""
+
 
     TESTING = True

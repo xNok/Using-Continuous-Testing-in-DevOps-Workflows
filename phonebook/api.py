@@ -5,11 +5,12 @@ from phonebook.repositories.memrepo import MemRepo
 from phonebook.use_cases.manage_persons import list_persons
 from phonebook.serializers.person import PersonJsonEncoder
 
+from phonebook.repositories.IRepo import RepoBase
+
 api = Blueprint('api',__name__)
 
 @api.route('/api/v1/persons',methods = ['GET'])
-def get_all_persons():
-    repo = MemRepo([])
+def get_all_persons(repo: RepoBase):
     result = list_persons(repo)
 
     return Response(
@@ -17,7 +18,6 @@ def get_all_persons():
         mimetype="application/json",
         status=200,
     )
-    pass
 
 @api.route('/api/v1/persons/<name>',methods = ['POST'])
 def add_person(name):
