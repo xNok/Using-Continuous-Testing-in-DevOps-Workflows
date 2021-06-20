@@ -35,14 +35,20 @@ jobs:
       run: |
         pytest
 
-  tests_api:
+  deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - run: echo "test"
 
+  tests_api:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "test"
+
   tests_e2e:
-    needs: build
+    needs: deploy
     runs-on: ubuntu-latest
     steps:
       - run: echo "test"
