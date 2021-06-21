@@ -2,3 +2,4 @@ pytest
 pytest-cov
 Faker
 pysqlite3
+build
