@@ -41,7 +41,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: phonebook
-        path: dist/phonebook-${GITHUB_RUN_ID}${GITHUB_RUN_NUMBER}.tar.gz
+        path: dist/**
 
   deploy:
     needs: build
