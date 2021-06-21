@@ -19,8 +19,8 @@ def get_all_persons(repo: RepoBase):
         status=200,
     )
 
-@api.route('/api/v1/persons/<name>',methods = ['POST'])
-def add_person(name):
+@api.route('/api/v1/persons/<full_name>',methods = ['POST'])
+def add_person(full_name):
     pass
 
 @api.route('/api/v1/persons/<name>',methods = ['GET'])
