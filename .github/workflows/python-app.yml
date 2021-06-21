@@ -35,6 +35,13 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - name: Build package
+      run: python -m build
+    - name: Upload application artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: phonebook
+        path: dist/phonebook-${GITHUB_RUN_ID}${GITHUB_RUN_NUMBER}.tar.gz
 
   deploy:
     needs: build
