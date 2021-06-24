@@ -70,7 +70,7 @@ jobs:
         env:
           BROWSER: chrome
           ROBOT_TESTS_DIR: ${{ github.workspace }}/tests_e2e
-          ROBOT_REPORTS_DIR: ${{ github.workspace }}/tests_e2e
+          ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
 
   gating:
     runs-on: ubuntu-latest
