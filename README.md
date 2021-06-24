@@ -51,7 +51,7 @@ A Github Action Workflow is made up of three elements:
 
 * **Jobs**, they determine sets actions of your pipeline and are executed in parallel unless dependencies between jobs are specified.
 
-* **Step**, they are the individual components of a Job and can be of two types `Scripts` or `Actions`. Steps defining a `run` attribute execute a command on the host defined by  `runs-on` at the beginning of a Job. Steps containing `uses` execute an [Action](https://docs.github.com/en/actions/creating-actions), a reusable automation script.
+* **Steps**, they are the individual components of a Job and can be of two types `Scripts` or `Actions`. Steps defining a `run` attribute execute a command on the host defined by  `runs-on` at the beginning of a Job. Steps containing `uses` execute an [Action](https://docs.github.com/en/actions/creating-actions), a reusable automation script.
 
 It’s straightforward to extend a workflow once you understand those three concepts. Here’s a sample workflow, that was recommended to me for a Python application :
 
