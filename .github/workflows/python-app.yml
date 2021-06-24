@@ -44,6 +44,7 @@ jobs:
 
   gating:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
     - name: Get the Numbers
@@ -52,7 +53,7 @@ jobs:
       uses: schneegans/dynamic-badges-action@v1.1.0
       with:
         auth: ${{ secrets.GIST_SECRET }}
-        gistID: ab3bde9504060bd1feb361555e79f51ds
+        gistID: ab3bde9504060bd1feb361555e79f51d
         filename: answer.json
         label: The Answer is
         message: ${{ env.ANSWER }}
