@@ -226,6 +226,8 @@ jobs:
     [...] # we move the gating at the end of the workflow
 ```
 
+![](doc_assets/step3.PNG)
+
 ### Add End-to-End Testing
 
 End-to-End Testing (e2e) aims to test a complete use case from the user perspective. You should see e2e as replacing a human with a robot. When it comes to select an e2e framework, I recommend prioritizing a that supports the Gherkin language. Gherkin is a way of writing tests in natural language (aka. plain English). The advantage of this approach is that more people can understand the test case, including Product Owners and Business Analysts. As a result, you create a better collaboration in the team. Verbalizing tests ensure that you are writing them from the User's perspective and not making the mistake of testing the function you just coded. 
@@ -279,13 +281,11 @@ Similar to the previous types of test, you will create a new job called `test_pe
 
 ## Conclusion
 
-Github Action is a fantastic tool for implementing CI/CT pipelines. The main reason is the contribution of the comunity. The market place ofers all you need to get started. In my experience no other CI/CT tools let me create workflow easily. It feels effortless to have a complex pipeline with many jobs.
+Github Action is a fantastic tool for implementing Continuous Integration and continuous testing pipelines. Thanks to the contribution of the community to the marketplace that offers all you need to get started. In my experience, no other CI/CT tools let me create a workflow that easily. It feels effortless to have a complex pipeline with many jobs.
 
-There is three important stage in a continous testing workflow. Each of then tests your system under a different perspective. Unit tests validate the internal logic. Integration tests validate the response of the system from it's boundary. End-to-end tests validate the system from the user perspective.
+There are three essential stages in a continuous testing workflow. Each of them tests your system from a different perspective. Unit tests validate the internal logic. Integration tests validate the response of the system from its boundary. End-to-end tests validate the system from the user's perspective.
 
-Final, to succeed in implementing continious testing your need to focus on your culture. Testing should become part of your DNA. stands for Culture, Automation, Lean, Measurement, and Sharing.
-
-
+Finally, to succeed in implementing continuous testing, you need to focus on your culture. Testing should become part of your DNA, and the five pillars to remember are Culture, Lean, Automation, Measurement, and Sharing.
 
 ## References
 
