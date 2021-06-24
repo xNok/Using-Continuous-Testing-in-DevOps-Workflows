@@ -61,9 +61,11 @@
 				},
 				"url": {
 					"raw": "httpbin.org/post?random=yo",
+					"host": [
+						"httpbin",
+						"org"
+					],
 					"path": [
-						"",
-						"httpbin.org",
 						"post"
 					],
 					"query": [
@@ -258,9 +260,11 @@
 				},
 				"url": {
 					"raw": "httpbin.org/post?random=yeah",
+					"host": [
+						"httpbin",
+						"org"
+					],
 					"path": [
-						"",
-						"httpbin.org",
 						"post"
 					],
 					"query": [
