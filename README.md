@@ -182,7 +182,7 @@ This is what your updated workflow looks like:
 
 ![](doc_assets/step2.PNG)
 
-And you got a badge to decorate your readme.md
+And you got a badge to decorate your `readme.md`.
 
 ![](doc_assets/badge.PNG)
 
