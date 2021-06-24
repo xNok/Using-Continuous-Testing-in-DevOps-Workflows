@@ -224,8 +224,8 @@ jobs:
     - uses: actions/checkout@master
     - uses: matt-ball/newman-action@master
       with:
-        collection: postman_collection.json
-        environment: postman_environment.json
+        collection: tests_integration/postman_collection.json
+        environment: tests_integration/postman_environment.json
   gating:
     needs: tests_api
     [...] # we move the gating at the end of the workflow
@@ -270,8 +270,11 @@ jobs:
         uses: joonvena/robotframework-docker-action@v0.1
         env:
           BROWSER: chrome
-          ROBOT_TESTS_DIR: ${{ github.workspace }}/robot_tests
-          ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
+          ROBOT_TESTS_DIR: ${{ github.workspace }}/tests_e2e
+          ROBOT_REPORTS_DIR: ${{ github.workspace }}
+  gating:
+    needs: [tests_api, test_e2e]
+    [...] # we move the gating at the end of the workflow
 ```
 
 ![](doc_assets/github_action_workflow_ui.PNG)

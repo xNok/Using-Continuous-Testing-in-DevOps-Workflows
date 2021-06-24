@@ -69,7 +69,7 @@ jobs:
         uses: joonvena/robotframework-docker-action@v0.1
         env:
           BROWSER: chrome
-          ROBOT_TESTS_DIR: ${{ github.workspace }}/test_e2e
+          ROBOT_TESTS_DIR: ${{ github.workspace }}/tests_e2e
           ROBOT_REPORTS_DIR: ${{ github.workspace }}
 
   gating:
