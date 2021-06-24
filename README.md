@@ -40,7 +40,7 @@ Now that you know the basics of Continious Testing, it is time to see how to imp
 
 The first you need is an initial workflow. If you already committed your application to a Github Repository, click on `Actions`. Github will automatically select and recommend a simple workflow that best suits your language. Select one of them by clicking on `Set up this workflow`, review the workflow steps, and commit. Right away, you should see your workflow starting to build and testing your application. Many starting workflows also include linting that validates the formating and detects potential errors.
 
-![](doc_assets/get_started.png)
+![](doc_assets/get_started_2.png)
 
 A Github Action Workflow is made up of three elements:
 
