@@ -47,15 +47,25 @@ jobs:
     needs: build
 
     steps:
-    - name: Get the Numbers
-      run: echo "ANSWER=42" >> $GITHUB_ENV
+    - name: Download coverage report
+      uses: actions/download-artifact@v2
+      with:
+        name: coverage-results
+    - name: Get the Coverage
+      shell: bash
+      run: : |
+        regex='<coverage.+line-rate="([0-9).[0-9]+)".+>'
+        line=$(grep -oP $regex coverage.xml)
+        [[ $line =~ $regex ]]
+        coverage=$( bc <<< ${BASH_REMATCH[1]}*100 )
+        echo ${coverage%.*}%  >> $GITHUB_ENV
     - name: Create the Badge
       uses: schneegans/dynamic-badges-action@v1.1.0
       with:
         auth: ${{ secrets.GIST_SECRET }}
         gistID: ab3bde9504060bd1feb361555e79f51d
-        filename: answer.json
-        label: The Answer is
+        filename: coverage.json
+        label: coverage
         message: ${{ env.ANSWER }}
         color: green
 
