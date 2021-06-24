@@ -86,6 +86,7 @@ jobs:
         pytest
 ```
 
+![](doc_assets/step1.PNG)
 
 
 ### Add code coverage reports
