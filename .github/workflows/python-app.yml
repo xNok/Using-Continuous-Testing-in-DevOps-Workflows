@@ -74,7 +74,7 @@ jobs:
 
   gating:
     runs-on: ubuntu-latest
-    needs: tests_api
+    needs: [tests_api, test_e2e]
     steps:
     - name: Download coverage report
       uses: actions/download-artifact@v2
