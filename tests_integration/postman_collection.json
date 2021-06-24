@@ -60,7 +60,7 @@
 					]
 				},
 				"url": {
-					"raw": "//httpbin.org/post?random=yo",
+					"raw": "httpbin.org/post?random=yo",
 					"path": [
 						"",
 						"httpbin.org",
@@ -257,7 +257,7 @@
 					]
 				},
 				"url": {
-					"raw": "//httpbin.org/post?random=yeah",
+					"raw": "httpbin.org/post?random=yeah",
 					"path": [
 						"",
 						"httpbin.org",
