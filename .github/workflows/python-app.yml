@@ -41,3 +41,20 @@ jobs:
         path: coverage.xml
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
+
+  gating:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the Numbers
+      run: echo "ANSWER=42" >> $GITHUB_ENV
+    - name: Create the Badge
+      uses: schneegans/dynamic-badges-action@v1.1.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: ab3bde9504060bd1feb361555e79f51ds
+        filename: answer.json
+        label: The Answer is
+        message: ${{ env.ANSWER }}
+        color: green
+
