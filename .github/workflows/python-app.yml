@@ -58,7 +58,13 @@ jobs:
         line=$(grep -oP $regex coverage.xml)
         [[ $line =~ $regex ]]
         coverage=$( bc <<< ${BASH_REMATCH[1]}*100 )
+        if (( $(echo "$coverage > 80" |bc -l) )); then
+          COLOR=green
+        else
+          COLOR=red
+        fi
         echo "COVERAGE=${coverage%.*}%" >> $GITHUB_ENV
+        echo "COLOR=$COLOR" >> $GITHUB_ENV
     - name: Create the Badge
       uses: schneegans/dynamic-badges-action@v1.1.0
       with:
@@ -67,5 +73,5 @@ jobs:
         filename: coverage.json
         label: coverage
         message: ${{ env.COVERAGE }}
-        color: green
+        color: ${{ env.COLOR }}
 
