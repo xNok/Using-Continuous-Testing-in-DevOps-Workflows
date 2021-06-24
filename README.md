@@ -9,14 +9,16 @@ The caveat is that automated tests have no value if they are not executed regula
 
 Github Action is a great tool to implement Continuous Testing. It is flexible and powerful enough to bring every step of the CI/CT process into a single place. Your application, tests, and workflow configuration lives with your code in your repository. Furthermore, the learning curve for Github Action is relatively smooth thanks to the [Marketplace](https://github.com/marketplace?type=actions) that provide thousands of Actions ready to use out of the box.
 
-## Continious Testing Best Practices
+## What does it take to implement Continious Testing?
 
 A good CI/CT process always contains at least the following step: 
 * Build and unit tests
 * deployment to the dev environment
-* integration, 
+* integration
 * end-to-end test
-* performance tests. 
+ 
+In this tutorial, You will implement these steps with Github Action. You will also add performance tests into your workflow. It is convenient to deploy your application in a `dev` environment before running complex tests such as integration and end-to-end. However you may also run your application in Github action for test purposes.
+
 Those are the steps you will implement with Github Action in this tutorial. It is convenient to deploy your application in a `dev` environment before running more complex tests. Also, your test will cover more surfaces and detect issues faster that way. However it is also possible to run your application in a Github action workflow and test it from there.
 
 ![](doc_diagrams/ci_ct_process.png)
@@ -25,7 +27,7 @@ Succeding in Implementing Continuous Testing can be challenging. It may create f
 
 To remediate to those challenges you should rely on the 5 DevOps as discribed by Pillar Jez Humble in “The DevOps Handbook”:  Culture, Lean, Automate, Measure ,and Sharing.
 
-Implementing Continuous Testing is first a change in **Culture**. Selecting the right tools for Continuous Integration and Continuous Testing can greatly improved collaboration. Github Action is a great choice with that concern in mind. It is easy to learn and provides a good feedback loop, especially with pull requests. On top of that, it offers many integrations as part of the Github ecosystem. 
+Implementing Continuous Testing is first a change in **Culture**. Selecting the right tools for Continuous Integration and Continuous Testing can greatly improved collaboration. Github Action is a great choice with that concern in mind.
 
 Keep your process **Lean**. Testing should not slow down your process. Instead, select the right amount of tests at the right time in the process. Thus keep an eye on your [job execution time](https://docs.github.com/en/actions/managing-workflow-runs/viewing-job-execution-time). Preferer small tasks that can fail fast and provide rapid feedback instead of long-running ones. 
 
@@ -96,21 +98,29 @@ jobs:
 
 With Github, most users rely on third parties to get coverage reports (such as [SonarQube](https://www.sonarqube.org/) or [Codecov](https://about.codecov.io/)). Integrating those SaaS into your workflow is simple, thanks to the Github action marketplace. Most third parties providing code coverage reports have created an Action to make the integration seamless.
 
-Yet, let's not rely on a third party yet. Instead, you want to be able to generate a badge to display in our readme. You are creating the very first step toward tracking code quality. You want to make sure you are not slacking off on testing your application). You will first edit your existing `Test with xxx` step and then add a new step to create the badge for us based on the coverage result.
+Yet, let's not rely on a third party yet. Instead, you want to be able to generate a badge to display in our `Readme.md`. You are putting in olace the very first step toward tracking code quality.
 
+* Edit your existing `Test with xxx` step to generage a coverage report.
+* Save the coverage report as an artifact. [Storing workflow data as artifacts](https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts).
+* Create a new Job `gating` and download the coverage report. This job must be executed after `build` therefore you must declare `needs: build` in you configuration.
+* Parse the coverage report to extract the coverage value. I provided a small script that does just that.
+* Renerate the badge and add it to you readme. Follow the setup step in the documentation of [schneegans/dynamic-badges-action@v1.1.0](https://github.com/Schneegans/dynamic-badges-action).
 
 ```
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
 name: Python application
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.9
@@ -122,87 +132,73 @@ jobs:
     - name: Lint with flake8
       [...]
     - name: Test with pytest
-      run:  pytest --cov-report xml --cov=phonebook tests/
-    - name: Upload pytest test results
+      # Update the command to generate coverage repot
+      run: pytest --cov-report xml --cov=phonebook tests/
+    - name: Upload pytest test coverage
+      # Upload the coverage result as an artifact
       uses: actions/upload-artifact@v2
       with:
-        name: pytest-results
+        name: coverage-results
         path: coverage.xml
       # Use always() to always run this step to publish test results when there are test failures
       if: ${{ always() }}
+
+  gating:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - name: Download coverage report
+      uses: actions/download-artifact@v2
+      with:
+        name: coverage-results
+    - name: Get the Coverage
+      shell: bash
+      run: |
+        regex='<coverage.+line-rate="([0-9).[0-9]+)".+>'
+        line=$(grep -oP $regex coverage.xml)
+        [[ $line =~ $regex ]]
+        coverage=$( bc <<< ${BASH_REMATCH[1]}*100 )
+        if (( $(echo "$coverage > 80" |bc -l) )); then
+          COLOR=green
+        else
+          COLOR=red
+        fi
+        echo "COVERAGE=${coverage%.*}%" >> $GITHUB_ENV
+        echo "COLOR=$COLOR" >> $GITHUB_ENV
+    - name: Create the Badge
+      # save the badge configuration in a Gist
+      uses: schneegans/dynamic-badges-action@v1.1.0
+      with:
+        auth: ${{ secrets.GIST_SECRET }}
+        gistID: ab3bde9504060bd1feb361555e79f51d
+        filename: coverage.json
+        label: coverage
+        message: ${{ env.COVERAGE }}
+        color: ${{ env.COLOR }}
 ```
+
+![](doc_assets/step2.PNG)
 
 
 ## Extending CT with other types of testing
 
 You have a basic Continious Integration workflow that includes unit test and coverage report. Now to obtain good Continious Testing workflow you need to extand with more layers of test. You will add three new Jobs: one for API Testing, one for End-to-End Testing and one for End-to-End Testing
 
-The workflow you created so far is Ideal for pull-requests. Continous integration test you to merge code changes as frequently as possible, therefore DevOps teams tends to run havier test suites, such as the one you are about to integrate, during a pull-request. On one hand, it is recommended to deploy you application in a test envireoment for this type of test. On the other hand libraries or open-source project don't necessarely have de developemetn environement. In that case, you will have to setup and run you application inside the Job using some steps prior to executing them. In other words the first option is better corporate solutions, the second is better for open-source projects.
-
-```yaml
-name: Python application
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build:
-    [...]
-  deploy:
-    [...]
-  tests:
-    needs: deploy
-    [...]
-```
-
-
-```yaml
-name: Python application
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build:
-    [...]
-  tests:
-    needs: deploy
-    steps:
-    - uses: actions/checkout@master
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    - name: Download application artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: phonebook
-    - name: Install Application
-      run: |
-        pip install phonebook-0.0.0.tar.gz
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.6.0
-      with:
-        mongodb-version: '4.4'
-    - name: Run the Application
-      run: |
-        export FLASK_APP=phonebook 
-        flask run
-    # Run the tests
-    [...]
-```
-
 ### Add API Testing
 
-API testing is part of Integration Testing.  Integration Testing aims to determine if individual units meet your requirement when combined together. When performing Integration Testing, you target the boundary (or interfaces) or your system. In this specific case, you are aiming your test at a Restfull API interface. Having API tests ensure that sets functionality meets your requirement and validates that your web server and connection to a database works properly.
+API testing is part of Integration Testing. Integration Testing aims to determine if individual units meet your requirement when combined together. When performing Integration Testing, you target the boundary (or interfaces) or your system. In this specific case, you are aiming your test at a Restfull API interface. Having API tests ensure that sets functionality meets your requirement and validates that your web server and connection to a database works properly.
 
 While you could write an API test in the same language as your application, you should also consider a tool like [Postman/Newman](https://blog.scottlogic.com/2020/02/04/GraduateGuideToAPITesting.html). Postman lets you define a sequence of HTTPS calls and validate each of them using their JavaScript test framework. Using Postman makes it easy to share integration test suites. Other developers can use them to facilitate their development process, for instance, mobile developers that might be working with a totally different stack than back-end developers.
 
 Newman is the command-line interface that lets you run the Postman tests. Now that you have selected an API testing framework, go to Github [Action Market place](https://github.com/marketplace?type=actions) and look for an action that meets your demands. For instance this one: [Newman Action](https://github.com/marketplace/actions/newman-action)
 
-Now edit your workflow configuration. Add a new job that must be executed after the deployment using `needs: deploy`. Then define the steps of your job: checkout your repository using the Action actions/checkout@master, run Newman using the action you just found in the marketplace.
+Now edit your workflow configuration.:
+* Add a new job that must be executed after the deployment using `needs: deploy`.
+* Define the steps of your job: 
+    * checkout your repository using the Action actions/checkout@master
+    * Run Newman using the action you just found in the marketplace
+* Move the gating job at the end of the workflow by changing the `needs` proprety.
 
 ```yaml
 name: Python application
@@ -215,7 +211,7 @@ jobs:
   build:
     [...]
   deploy:
-    [...]
+    [...] # our deployment steps
   tests_api:
     needs: deploy
     runs-on: ubuntu-latest
@@ -225,6 +221,9 @@ jobs:
       with:
         collection: postman_collection.json
         environment: postman_environment.json
+  gating:
+    needs: tests_api
+    [...] # we move the gating at the end of the workflow
 ```
 
 ### Add End-to-End Testing
