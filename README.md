@@ -1,6 +1,6 @@
 # Using-Continuous-Testing-in-DevOps-Workflows
 
-![](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/xNok/ab3bde9504060bd1feb361555e79f51d/raw/a556ecef4a526c79171135ed04e42653ef75db49/coverage.json)
+![](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/xNok/ab3bde9504060bd1feb361555e79f51d/raw/coverage.json)
 
 
 Automation Testing is a crucial element to fasten your delivery process. The more you automate, the more confidence you gain because the quality of each release of your application or library is measurable. Additionally, you reduce cost, save time and effort by lowering manual testing. Automated testing aims to flush out any potential regressions.
@@ -89,6 +89,8 @@ jobs:
         pytest
 ```
 
+This what a basic workflow looks like:
+
 ![](doc_assets/step1.PNG)
 
 
@@ -176,8 +178,13 @@ jobs:
         color: ${{ env.COLOR }}
 ```
 
+This is what your updated workflow looks like:
+
 ![](doc_assets/step2.PNG)
 
+And you got a badge to decorate your readme.md
+
+![](doc_assets/badge.PNG)
 
 ## Extending CT with other types of testing
 
@@ -223,6 +230,8 @@ jobs:
     needs: tests_api
     [...] # we move the gating at the end of the workflow
 ```
+
+Now you workflow should contain 4 sequential jobs:
 
 ![](doc_assets/step3.PNG)
 
