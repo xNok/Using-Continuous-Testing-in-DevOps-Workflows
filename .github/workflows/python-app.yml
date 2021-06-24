@@ -58,6 +58,20 @@ jobs:
         collection: tests_integration/postman_collection.json
         environment: tests_integration/postman_environment.json
 
+  test_e2e:
+    runs-on: ubuntu-latest
+    needs: deploy
+    name: Run Robot Framework Tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Robot Framework
+        uses: joonvena/robotframework-docker-action@v0.1
+        env:
+          BROWSER: chrome
+          ROBOT_TESTS_DIR: ${{ github.workspace }}/test_e2e
+          ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
+
   gating:
     runs-on: ubuntu-latest
     needs: tests_api
