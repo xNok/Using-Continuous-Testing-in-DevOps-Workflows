@@ -19,8 +19,6 @@ A good CI/CT process always contains at least the following step:
  
 In this tutorial, You will implement these steps with Github Action. You will also add performance tests into your workflow. It is convenient to deploy your application in a `dev` environment before running complex tests such as integration and end-to-end. However you may also run your application in Github action for test purposes.
 
-Those are the steps you will implement with Github Action in this tutorial. It is convenient to deploy your application in a `dev` environment before running more complex tests. Also, your test will cover more surfaces and detect issues faster that way. However it is also possible to run your application in a Github action workflow and test it from there.
-
 ![](doc_diagrams/ci_ct_process.png)
 
 Succeding in Implementing Continuous Testing can be challenging. It may create frustration for teams that are not used to the fail-fast approach. Seeing builds or pipelines failing can be overwhelming at the beginning. Prioritizing fixing tests instead of focusing on new features might also be a significant change. 
