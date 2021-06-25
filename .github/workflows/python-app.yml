@@ -65,6 +65,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Create folder for reports
+        run: |
+          mkdir reports
+          touch reports/output.xml
       - name: Robot Framework
         run: |
           docker run \
