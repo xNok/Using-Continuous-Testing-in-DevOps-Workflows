@@ -3,3 +3,4 @@ pytest-cov
 Faker
 pysqlite3
 build
+pytest-benchmark
