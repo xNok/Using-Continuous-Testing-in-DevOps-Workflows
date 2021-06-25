@@ -1,18 +1,26 @@
 *** Settings ***
-Library			SeleniumLibrary
+Documentation                                      This is a basic test
+Library                                            SeleniumLibrary
+
 
 *** Variables ***
-${BROWSER}		%{BROWSER}
+| ${GoogleBaseUrl} | https://www.google.com/
+| ${GoogleForm} | css=form[name=f]
+| ${GoogleQuery} | css=input[name=q]
 
 *** Test Cases ***
-Visit Bing
-	Open Browser			https://www.bing.com		${BROWSER}
-	Capture Page Screenshot
+Google search
+    Open Google Search
+    Do Google Search  test
 
-Visit Google
-	Open Browser			https://www.google.com		${BROWSER}
-	Capture Page Screenshot
+*** KeyWords ***
+Open Google Search
+    Open browser  ${GoogleBaseUrl}
+    Wait until element is visible  ${GoogleQuery}
 
-Visit Yahoo
-	Open Browser			https://search.yahoo.com	${BROWSER}
-	Capture Page Screenshot
+Do Google Search
+    [Arguments]    ${term}
+    Log to console  Do Google Search with "${term}"
+    input text  ${GoogleQuery}  ${EMPTY}
+    input text  ${GoogleQuery}   ${term}
+    submit form
