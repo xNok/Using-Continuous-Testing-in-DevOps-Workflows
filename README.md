@@ -106,7 +106,7 @@ Yet, let's not rely on a third party yet. Instead, you want to be able to genera
 * Parse the coverage report to extract the coverage value. I provided a small script that does just that.
 * Renerate the badge and add it to you readme. Follow the setup step in the documentation of [schneegans/dynamic-badges-action@v1.1.0](https://github.com/Schneegans/dynamic-badges-action).
 
-```
+```yml
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
