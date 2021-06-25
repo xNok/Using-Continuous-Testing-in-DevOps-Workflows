@@ -1,26 +1,18 @@
 *** Settings ***
-Documentation                                      This is a basic test
-Library                                            Selenium2Library
+Library			SeleniumLibrary
 
 *** Variables ***
-${url}                                              https://www.google.com
-${browser}                                          chrome
-${text}                                             xpath=//*[@id="lst-ib"]
-${search_button}                                    css=input.lsb
+${BROWSER}		%{BROWSER}
 
 *** Test Cases ***
-User can open page
-    [Documentation]                                 As a user I can open the google page
-    open browser                                    ${URL}    ${BROWSER}
-    wait until page contains                        ${url}
-    close browser
+Visit Bing
+	Open Browser			https://www.bing.com		${BROWSER}
+	Capture Page Screenshot
 
-User fill in the Search text box
-    [Documentation]                                 The user search 'Test Definition'
-    open browser                                    ${URL}    ${browser}
-    wait until page contains                        ${URL}
-    input text                                      ${text}  Test Definition
-    click element                                    ${search_button} 
-    wait until page contains                        Test
-    sleep     5s
-    Close Browser
+Visit Google
+	Open Browser			https://www.google.com		${BROWSER}
+	Capture Page Screenshot
+
+Visit Yahoo
+	Open Browser			https://search.yahoo.com	${BROWSER}
+	Capture Page Screenshot

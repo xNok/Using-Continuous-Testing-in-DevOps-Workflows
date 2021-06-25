@@ -71,10 +71,11 @@ jobs:
           touch reports/output.xml
       - name: Robot Framework
         run: |
-          docker run
-          -v ${PWD}/reports:/opt/robotframework/reports:Z
-          -v ${{ github.workspace }}/:/opt/robotframework/tests_e2e:Z
-          --user $(id -u):$(id -g)
+          docker run \
+          -v ${PWD}/reports:/opt/robotframework/reports:Z \
+          -v ${{ github.workspace }}/:/opt/robotframework/tests_e2e:Z \
+          --user $(id -u):$(id -g) \
+          -e BROWSER=chrome
           ppodgorsek/robot-framework:latest
 
   gating:

@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+reports/
+
 # C extensions
 *.so
 
@@ -129,3 +131,4 @@ dmypy.json
 .pyre/
 cov.xml
 junit/test-resultss.xml
+reports/log.html
