@@ -33,12 +33,11 @@ Keep your process **Lean**. Testing should not slow down your process. Instead, 
 **Measure** your improvement and build a baseline for the quality of your software. For example, collect your code coverage, number of successful vs. failed tests, and performance metric.
 
 Do not forget to encourage knowledge **Sharing**. Test automation is not a single man's job. Everyone in the team should know how the test suites work and fix simple errors when the workflows fail.
-
 ## Implementing CI/CT with GitHub Actions
 
 Now that you know the basics of Continious Testing, it is time to see how to implement the first step in the process by creating a Github Actions Workflow that build and run our unit tests.
 
-### Build a GitHub Actions pipeline with unit tests
+### Build a GitHub Actions workflow with unit tests
 
 The first thing you need is an initial workflow. If you already committed your application to a Github Repository, click on `Actions`. Github will automatically select and recommend a simple workflow that best suits your language. Select one of them by clicking on `Set up this workflow`, review the workflow steps, and commit. Right away, you should see your workflow starting to build and testing your application. Many starting workflows also include linting that validates the formating and detects potential errors.
 
@@ -191,16 +190,16 @@ You have a basic Continious Integration workflow that includes unit test and cov
 
 ### Add API Testing
 
-API testing is part of Integration Testing. Integration Testing aims to determine if individual units meet your requirement when combined together. When performing Integration Testing, you target the boundary (or interfaces) or your system. In this specific case, you are aiming your test at a Restfull API interface. Having API tests ensure that sets functionality meets your requirement and validates that your web server and connection to a database works properly.
+API testing is part of Integration Testing. Integration Testing aims to determine if individual units meet your requirement when combined together. When performing Integration Testing, you target the boundary (or interfaces) or your system. In this specific case, you are aiming your test at a Restfull API. Having API tests ensure that sets functionality meets your requirement and validates that your web server and connection to a database works properly.
 
 While you could write an API test in the same language as your application, you should also consider a tool like [Postman/Newman](https://blog.scottlogic.com/2020/02/04/GraduateGuideToAPITesting.html). Postman lets you define a sequence of HTTPS calls and validate each of them using their JavaScript test framework. Using Postman makes it easy to share integration test suites. Other developers can use them to facilitate their development process, for instance, mobile developers that might be working with a totally different stack than back-end developers.
 
 Newman is the command-line interface that lets you run the Postman tests. Now that you have selected an API testing framework, go to Github [Action Market place](https://github.com/marketplace?type=actions) and look for an action that meets your demands. For instance this one: [Newman Action](https://github.com/marketplace/actions/newman-action)
 
-Now edit your workflow configuration.:
+Now edit your workflow configuration:
 * Add a new job that must be executed after the deployment using `needs: deploy`.
 * Define the steps of your job: 
-    * checkout your repository using the Action actions/checkout@master
+    * checkout your repository using the Action `actions/checkout@master`
     * Run Newman using the action you just found in the marketplace
 * Move the gating job at the end of the workflow by changing the `needs` proprety.
 
@@ -236,11 +235,11 @@ Now you workflow should contain 4 sequential jobs:
 
 ### Add End-to-End Testing
 
-End-to-End Testing (e2e) aims to test a complete use case from the user perspective. You should see e2e as replacing a human with a robot. When it comes to select an e2e framework, I recommend prioritizing a that supports the Gherkin language. Gherkin is a way of writing tests in natural language (aka. plain English). The advantage of this approach is that more people can understand the test case, including Product Owners and Business Analysts. As a result, you create a better collaboration in the team. Verbalizing tests ensure that you are writing them from the User's perspective and not making the mistake of testing the function you just coded. 
+End-to-End Testing (e2e) aims to test complete use cases from the user perspective. You should see e2e as replacing a human with a robot. When it comes to select an e2e framework, I recommend prioritizing one that supports the Gherkin language. Gherkin promotes writing tests in natural language (aka. plain English). With this approach more people can understand tests case, including Product Owners and Business Analysts. As a result, you create a better collaboration in the team. Verbalizing tests also ensure that you are writing them from the User's perspective and not making the mistake of testing the functions you just coded. 
 
 I selected RobotFramework for this example. RobotFramework uses Selenium to control a web browser and thus replace a human by simulating clicks and text entries. Once again, you can go to [Gitbhub Action Market place](https://github.com/marketplace?type=actions) and look for an action meeting your needs. For instance, this one: [Robot Framework Docker Action](https://github.com/marketplace/actions/robot-framework)
 
-Add a new job to the workflow configuration. This job must be executed after deploy using`needs: deploy`. You will notice that since `tests_api` and `test_e2e` both needs `deploy`, they will be executed in parallel after the deployment. Have a look to the result:
+Add a new job to the workflow configuration. This job must be executed after deploy using `needs: deploy`. You will notice that since `tests_api` and `test_e2e` both needs `deploy`, they will be executed in parallel after the deployment. Have a look to the result:
 
 ![](doc_assets/step4.PNG)
 
