@@ -17,9 +17,9 @@ A good CI/CT process always contains at least the following step:
 * integration
 * end-to-end test
  
-In this tutorial, You will implement these steps with Github Action. You will also add performance tests into your workflow. It is convenient to deploy your application in a `dev` environment before running complex tests such as integration and end-to-end. However you may also run your application in Github action for test purposes.
+In this tutorial, You will implement these steps with Github Action. You will also add performance tests into your workflow. It is convenient to deploy your application in a `dev` environment before running complex tests such as integration and end-to-end. However you may also run your application in Github action for test purposes. Here is a visual of the final workflow for this tutorial:
 
-![](doc_diagrams/ci_ct_process.png)
+![](doc_assets/step5.PNG)
 
 Succeding in Implementing Continuous Testing can be challenging. It may create frustration for teams that are not used to the fail-fast approach. Seeing builds or pipelines failing can be overwhelming at the beginning. Prioritizing fixing tests instead of focusing on new features might also be a significant change. 
 
@@ -298,6 +298,58 @@ The first approach is to identify the bottleneck; for that, you will design an e
 The other approach is benchmarking; when performing benchmarking, you first identify critical elements of your application and measure over time its speed. The goal of benchmarking is to improve that metric over time; conversely, if the metric degradation you want your Continuous Testing to alert you of regression in performance and address the problem as soon as possible.
 
 Similar to the previous types of test, you will create a new job called `test_performance`. This time I did not find an Action on the marketplace that fits my requirement. But I recommend [this article](https://medium.com/nerd-for-tech/ci-build-performance-testing-with-github-action-e6b227097c83) to help you select your framework and implement the steps of this job yourself. Here is the workflow I came up with for my python application:
+
+```yml
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build: [...]
+  deploy: [...]
+  tests_api: [...]
+  test_e2e: [...]
+  tests_performances:
+    name: Check performance regeression.
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f test-requirements.txt ]; then pip install -r test-requirements.txt; fi
+      - name: Run benchmark
+        run: pytest tests_performances --benchmark-json output.json
+      - name: Store benchmark result
+        uses: rhysd/github-action-benchmark@v1
+        # NOTE: this action only works for public repository
+        # A pull-request is open with a fix
+        with:
+          tool: 'pytest'
+          output-file-path: output.json
+          # Personal access token to deploy GitHub Pages branch
+          github-token: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
+          # Push and deploy GitHub pages branch automatically
+          auto-push: true
+          # Show alert with commit comment on detecting possible performance regression
+          alert-threshold: '200%'
+          comment-on-alert: true
+          fail-on-alert: true
+          alert-comment-cc-users: '@xNok'
+```
+
+Your final workflow must look like this:
+
+![](doc_assets/step5.PNG)
 
 ## Conclusion
 
