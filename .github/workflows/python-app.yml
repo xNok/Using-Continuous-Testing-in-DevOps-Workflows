@@ -82,7 +82,6 @@ jobs:
           name: robotframework report
           path: reports
 
-jobs:
   tests_performances:
     name: Check performance regeression.
     runs-on: ubuntu-latest
