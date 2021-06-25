@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1624598792002,
+  "lastUpdate": 1624598840002,
   "repoUrl": "https://github.com/xNok/Using-Continuous-Testing-in-DevOps-Workflows",
   "entries": {
     "Benchmark": [
@@ -62,6 +62,37 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.00003062824571150988",
             "extra": "mean: 67.50227060285214 usec\nrounds: 12195"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "nokwebspace@gmail.com",
+            "name": "xNok",
+            "username": "xNok"
+          },
+          "committer": {
+            "email": "nokwebspace@gmail.com",
+            "name": "xNok",
+            "username": "xNok"
+          },
+          "distinct": true,
+          "id": "d4b5ca7cf9d2aea0150a2340faeb938eca76984a",
+          "message": "refact: workflow",
+          "timestamp": "2021-06-25T01:26:06-04:00",
+          "tree_id": "5a297e50585aa382fb43f16117bef576abaa6acf",
+          "url": "https://github.com/xNok/Using-Continuous-Testing-in-DevOps-Workflows/commit/d4b5ca7cf9d2aea0150a2340faeb938eca76984a"
+        },
+        "date": 1624598839631,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "tests_performances/test_benchmark.py::test_my_stuff",
+            "value": 16676.715633688687,
+            "unit": "iter/sec",
+            "range": "stddev: 0.000002706426756813856",
+            "extra": "mean: 59.963845517632784 usec\nrounds: 12092"
           }
         ]
       }
