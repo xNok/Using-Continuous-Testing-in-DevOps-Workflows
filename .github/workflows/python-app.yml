@@ -66,9 +66,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create folder for reports
-        run: |
-          mkdir reports
-          touch reports/output.xml
+        run: mkdir reports
       - name: Robot Framework
         run: |
           docker run \

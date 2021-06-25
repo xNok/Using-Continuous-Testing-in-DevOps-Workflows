@@ -249,16 +249,11 @@ name: Python application
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build:
-    [...]
-  deploy:
-    [...]
-  tests_api:
-    [...]
+  build: [...]
+  deploy: [...]
+  tests_api: [...]
   test_e2e:
     runs-on: ubuntu-latest
     needs: deploy
@@ -266,18 +261,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Robot Framework
-        uses: joonvena/robotframework-docker-action@v0.1
-        env:
-          BROWSER: chrome
-          ROBOT_TESTS_DIR: ${{ github.workspace }}/tests_e2e
-          ROBOT_REPORTS_DIR: ${{ github.workspace }}
+      - name: Create folder for reports
+        run: mkdir reports
+      - name: Robot Framework Test
+        # NOTE: joonvena/robotframework-docker-action@v0.1 had permissions issue
+        # This action is base on a docker image. I had to fall back to that image
+        # and use --user flag
+        run: |
+          docker run \
+            -v ${PWD}/reports:/opt/robotframework/reports:Z \
+            -v ${{ github.workspace }}/tests_e2e:/opt/robotframework/tests:Z \
+            --user $(id -u):$(id -g) \
+            -e BROWSER=chrome \
+            ppodgorsek/robot-framework:latest
+      - name: Upload test results
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: robotframework report
+          path: reports
   gating:
     needs: [tests_api, test_e2e]
     [...] # we move the gating at the end of the workflow
 ```
 
-![](doc_assets/github_action_workflow_ui.PNG)
+Your updated workflow must look like this:
+
+![](doc_assets/step4.PNG)
 
 ### Add Performance Testing 
 
