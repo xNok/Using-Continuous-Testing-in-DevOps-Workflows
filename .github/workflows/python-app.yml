@@ -70,11 +70,12 @@ jobs:
           mkdir reports
           touch reports/output.xml
       - name: Robot Framework
-        uses: joonvena/robotframework-docker-action@v0.1
-        env:
-          BROWSER: chrome
-          ROBOT_TESTS_DIR: ${{ github.workspace }}/tests_e2e
-          ROBOT_REPORTS_DIR: ${{ github.workspace }}/reports
+        run: |
+        docker run
+        -v ${PWD}/reports:/opt/robotframework/reports:Z
+        -v ${{ github.workspace }}/:/opt/robotframework/tests_e2e:Z
+        --user $(id -u):$(id -g)
+        ppodgorsek/robot-framework:latest
 
   gating:
     runs-on: ubuntu-latest
