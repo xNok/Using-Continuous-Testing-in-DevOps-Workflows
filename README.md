@@ -2,7 +2,6 @@
 
 ![](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/xNok/ab3bde9504060bd1feb361555e79f51d/raw/coverage.json)
 
-
 Automation Testing is a crucial element to fasten your delivery process. The more you automate, the more confidence you gain because the quality of each release of your application or library is measurable. Additionally, you reduce cost, save time and effort by lowering manual testing. Automated testing aims to flush out any potential regressions.
 
 The caveat is that automated tests have no value if they are not executed regularly alongside your Continuous Integration (CI) pipeline. Continuous integration refers to frequently merging developer code changes, building and creating an artifact that can later be tested and deployed. Extending the CI process by adding automated tests is referred to as Continuous Testing (CT). CT enables you to apply the fail-fast principle. Each code change, build, and deployment must be tested against several layers of automated tests. It results in rapid feedback on the quality of your product and the state of the development process.
@@ -241,7 +240,12 @@ End-to-End Testing (e2e) aims to test a complete use case from the user perspect
 
 I selected RobotFramework for this example. RobotFramework uses Selenium to control a web browser and thus replace a human by simulating clicks and text entries. Once again, you can go to [Gitbhub Action Market place](https://github.com/marketplace?type=actions) and look for an action meeting your needs. For instance, this one: [Robot Framework Docker Action](https://github.com/marketplace/actions/robot-framework)
 
-Add a new job to the workflow configuration. This job must be executed after deploy using`needs: deploy`. You will notice that since `tests_api` and `test_e2e` both needs `deploy`, they will be executed in parallel after the deployment. For this example, you’ll have a workflow like this:
+Add a new job to the workflow configuration. This job must be executed after deploy using`needs: deploy`. You will notice that since `tests_api` and `test_e2e` both needs `deploy`, they will be executed in parallel after the deployment. Have a look to the result:
+
+![](doc_assets/step4.PNG)
+
+
+To achieve this workflow, your configuration should look along those lines:
 
 ```yaml
 name: Python application
@@ -282,22 +286,18 @@ jobs:
           path: reports
   gating:
     needs: [tests_api, test_e2e]
-    [...] # we move the gating at the end of the workflow
+    [...] # move the gating at the end of the workflow
 ```
-
-Your updated workflow must look like this:
-
-![](doc_assets/step4.PNG)
 
 ### Add Performance Testing 
 
-Performance Testing is a broad topic because there is not one  but multiple types of performance testing. Most of the sources on the internet agree on six types: Load testing, Stress testing, Soak testing, Spike testing, Scalability testing, Capacity testing. Yet, I do not recommend that you try to put in place each of them. Instead, you need to consider that there are two approaches to performance testing. 
+Performance Testing is a broad topic because there is not one but multiple types of performance testing. Most of sources on the internet agree on six types: Load testing, Stress testing, Soak testing, Spike testing, Scalability testing, Capacity testing. Yet, I do not recommend that you try to put in place each of them. Instead, you need to consider the two approaches to performance testing. 
 
-The first approach is to identify the bottleneck; for that, you will design an experiment that identifies those bottlenecks and measures the limit of your system. 
+The first approach is **identify bottlenecks**; for that, you design an experiment that identifies bottlenecks and measures the limit of your system. 
 
-The other approach is benchmarking; when performing benchmarking, you first identify critical elements of your application and measure over time its speed. The goal of benchmarking is to improve that metric over time; conversely, if the metric degradation you want your Continuous Testing to alert you of regression in performance and address the problem as soon as possible.
+The other approach is **benchmarking**; when performing benchmarking, you identify critical elements of your application and measure its speed. The goal of benchmarking is to improve one performance metric over time; conversely, in case of metric degradation you want to be alerted and address the problem as soon as possible.
 
-Similar to the previous types of test, you will create a new job called `test_performance`. This time I did not find an Action on the marketplace that fits my requirement. But I recommend [this article](https://medium.com/nerd-for-tech/ci-build-performance-testing-with-github-action-e6b227097c83) to help you select your framework and implement the steps of this job yourself. Here is the workflow I came up with for my python application:
+Similar to the previous types of test, you will create a new job (called `test_performance`). This time I did not find an Action on the marketplace that fits my requirement. But I recommend [this article](https://medium.com/nerd-for-tech/ci-build-performance-testing-with-github-action-e6b227097c83) to help you select your framework and implement the steps of the job yourself. Here is the workflow I came up with for my python application:
 
 ```yml
 name: Python application
@@ -311,7 +311,7 @@ jobs:
   deploy: [...]
   tests_api: [...]
   test_e2e: [...]
-  tests_performances:
+  test_performances:
     name: Check performance regeression.
     runs-on: ubuntu-latest
     needs: deploy
@@ -361,12 +361,16 @@ Finally, to succeed in implementing continuous testing, you need to focus on you
 
 ## References
 
-https://faun.pub/robot-framework-testing-using-github-actions-e0aa8df16fd8
-https://itnext.io/github-actions-code-coverage-without-third-parties-f1299747064d
-https://docs.github.com/en/actions/guides/building-and-testing-python
-https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts
-https://docs.github.com/en/actions/learn-github-actions
-https://medium.com/nerd-for-tech/ci-build-performance-testing-with-github-action-e6b227097c83
-https://www.cigniti.com/blog/types-of-performance-testing/
-https://searchsoftwarequality.techtarget.com/definition/performance-testing
+* Github Action:
+  * https://docs.github.com/en/actions/learn-github-actions
+  * https://docs.github.com/en/actions/guides/building-and-testing-python
+  * https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts
+* Code coverage and Github Actions
+  * https://itnext.io/github-actions-code-coverage-without-third-parties-f1299747064d
+* End-to-end testing
+  * https://faun.pub/robot-framework-testing-using-github-actions-e0aa8df16fd8
+* Performance testing
+  * https://medium.com/nerd-for-tech/ci-build-performance-testing-with-github-action-e6b227097c83
+  * https://www.cigniti.com/blog/types-of-performance-testing/
+  * https://searchsoftwarequality.techtarget.com/definition/performance-testing
 
