@@ -2,6 +2,8 @@
 
 ![](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/xNok/ab3bde9504060bd1feb361555e79f51d/raw/coverage.json)
 
+[Published on earthly.dev](https://earthly.dev/blog/continuous-testing-in-devops/)
+
 Automation Testing is a crucial element to fasten your delivery process. It aims to flush out any potential regressions. The more you automate, the more confidence you gain in the quality of your software because the quality of each release of your application or library is measurable. Additionally, you reduce cost, save time and effort by lowering manual testing. 
 
 The caveat is that automated tests have no value if they are not executed regularly alongside your Continuous Integration (CI) pipeline. Continuous integration refers to frequently merging developer code changes, building and creating an artifact that can later be tested and deployed. Extending the CI process by adding automated tests is referred to as Continuous Testing (CT). CT enables you to apply the fail-fast principle. Each code change, build, and deployment must be tested against several layers of automated tests. Thus, it results in rapid feedback on the quality of your product and the state of the development process.
